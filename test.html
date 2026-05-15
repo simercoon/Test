@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test — Manifestarea Conștientă</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A96E;
+    --gold-light: #E8D5B0;
+    --gold-dark: #8B6E3A;
+    --cream: #FAF8F4;
+    --dark: #1A1714;
+    --mid: #3D3530;
+    --muted: #8A7E76;
+    --border: rgba(201,169,110,0.25);
+    --correct-bg: #EFF7ED;
+    --correct-border: #4A9040;
+    --correct-text: #2A5C26;
+    --wrong-bg: #FBEEED;
+    --wrong-border: #C0392B;
+    --wrong-text: #7B1F1F;
+    --neutral-bg: #F0EFFF;
+    --neutral-border: #7B6FD0;
+    --neutral-text: #3D3480;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--dark);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  .hero {
+    background: var(--dark);
+    color: var(--cream);
+    text-align: center;
+    padding: 4rem 2rem 3.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(201,169,110,0.18) 0%, transparent 70%);
+  }
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+    font-weight: 500;
+    position: relative;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--cream);
+    position: relative;
+    margin-bottom: 1rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--gold-light); }
+  .hero p {
+    color: rgba(250,248,244,0.65);
+    font-size: 15px;
+    max-width: 500px;
+    margin: 0 auto;
+    position: relative;
+    line-height: 1.8;
+  }
+  .hero-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem auto 0;
+    position: relative;
+  }
+  .hero-divider span { width: 60px; height: 0.5px; background: var(--gold); opacity: 0.5; }
+  .hero-divider i { color: var(--gold); font-size: 14px; opacity: 0.8; }
+
+  .progress-wrap {
+    background: white;
+    border-bottom: 0.5px solid var(--border);
+    padding: 0.75rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .progress-label { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .progress-bar-outer { flex: 1; height: 3px; background: rgba(0,0,0,0.06); border-radius: 99px; overflow: hidden; }
+  .progress-bar-inner { height: 100%; background: var(--gold); border-radius: 99px; transition: width 0.5s ease; }
+  .progress-count { font-size: 12px; color: var(--gold-dark); font-weight: 500; white-space: nowrap; }
+
+  .content { max-width: 720px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+
+  .name-block {
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    background: white;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.5s ease 0.05s forwards;
+  }
+  .name-label { font-size: 12px; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 8px; }
+  .name-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 0.5px solid rgba(0,0,0,0.12);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--dark);
+    background: var(--cream);
+    transition: border-color 0.15s;
+  }
+  .name-input:focus { outline: none; border-color: var(--gold); background: white; }
+  .name-input::placeholder { color: var(--muted); }
+
+  .q-block {
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.5s ease forwards;
+  }
+  .q-block:nth-child(2) { animation-delay: 0.10s; }
+  .q-block:nth-child(3) { animation-delay: 0.18s; }
+  .q-block:nth-child(4) { animation-delay: 0.26s; }
+  .q-block:nth-child(5) { animation-delay: 0.34s; }
+  .q-block:nth-child(6) { animation-delay: 0.42s; }
+  .q-block:nth-child(7) { animation-delay: 0.50s; }
+  .q-block:nth-child(8) { animation-delay: 0.58s; }
+  .q-block:nth-child(9) { animation-delay: 0.66s; }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+  .q-inner {
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    background: white;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .q-inner:hover { box-shadow: 0 4px 24px rgba(201,169,110,0.08); }
+
+  .q-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 0.5px solid var(--border);
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .q-badge {
+    background: var(--dark);
+    color: var(--gold-light);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding: 3px 10px;
+    border-radius: 99px;
+    white-space: nowrap;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .q-badge.text-type { background: rgba(201,169,110,0.15); color: var(--gold-dark); }
+  .q-badge.neutral-type { background: rgba(123,111,208,0.12); color: var(--neutral-border); }
+  .q-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--dark);
+    line-height: 1.5;
+  }
+  .q-body { padding: 1.25rem 1.5rem; }
+
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 0.5px solid rgba(0,0,0,0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--mid);
+    background: var(--cream);
+    transition: all 0.15s ease;
+    text-align: left;
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+  }
+  .opt:hover:not(.disabled) { border-color: var(--gold); background: white; color: var(--dark); }
+  .opt-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 12px;
+    transition: all 0.15s;
+  }
+  .opt.correct { background: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-text); pointer-events: none; }
+  .opt.correct .opt-dot { background: var(--correct-border); border-color: var(--correct-border); color: white; }
+  .opt.wrong { background: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-text); pointer-events: none; }
+  .opt.wrong .opt-dot { background: var(--wrong-border); border-color: var(--wrong-border); color: white; }
+  .opt.neutral-selected { background: var(--neutral-bg); border-color: var(--neutral-border); color: var(--neutral-text); pointer-events: none; }
+  .opt.neutral-selected .opt-dot { background: var(--neutral-border); border-color: var(--neutral-border); color: white; }
+  .opt.disabled:not(.correct):not(.wrong):not(.neutral-selected) { opacity: 0.4; pointer-events: none; }
+  .opt-label { flex: 1; }
+
+  .feedback {
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    display: none;
+    line-height: 1.5;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok { background: var(--correct-bg); color: var(--correct-text); border: 0.5px solid var(--correct-border); }
+  .feedback.bad { background: var(--wrong-bg); color: var(--wrong-text); border: 0.5px solid var(--wrong-border); }
+  .feedback.neutral { background: var(--neutral-bg); color: var(--neutral-text); border: 0.5px solid var(--neutral-border); }
+
+  .text-wrap { display: flex; flex-direction: column; gap: 8px; }
+  .text-hint { font-size: 12px; color: var(--muted); letter-spacing: 0.03em; }
+  textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px 14px;
+    border: 0.5px solid rgba(0,0,0,0.12);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--dark);
+    background: var(--cream);
+    resize: vertical;
+    transition: border-color 0.15s;
+    line-height: 1.6;
+  }
+  textarea:focus { outline: none; border-color: var(--gold); background: white; }
+  textarea::placeholder { color: var(--muted); }
+
+  .submit-area { text-align: center; margin-top: 3rem; }
+
+  .error-msg {
+    margin-bottom: 1rem;
+    padding: 10px 16px;
+    background: var(--wrong-bg);
+    color: var(--wrong-text);
+    border: 0.5px solid var(--wrong-border);
+    border-radius: 10px;
+    font-size: 13px;
+    display: none;
+  }
+  .error-msg.show { display: block; }
+
+  .submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--dark);
+    color: var(--gold-light);
+    border: none;
+    padding: 14px 40px;
+    border-radius: 99px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .submit-btn:hover { background: var(--mid); transform: translateY(-1px); }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* Success screen */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 5rem 2rem;
+  }
+  .success-screen.show {
+    display: block;
+    animation: fadeUp 0.7s ease forwards;
+    opacity: 0;
+  }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+  .success-symbol {
+    font-size: 2.5rem;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+  .success-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 400;
+    color: var(--dark);
+    margin-bottom: 1.2rem;
+    line-height: 1.3;
+  }
+  .success-title em { font-style: italic; color: var(--gold-dark); }
+  .success-msg {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 440px;
+    margin: 0 auto 2rem;
+    line-height: 1.9;
+  }
+  .success-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem auto;
+  }
+  .success-divider span { width: 50px; height: 0.5px; background: var(--gold); opacity: 0.4; }
+  .success-score {
+    display: inline-block;
+    background: var(--dark);
+    color: var(--gold-light);
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    padding: 10px 28px;
+    border-radius: 99px;
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 3rem 1.25rem 2.5rem; }
+    .content { padding: 2rem 1rem 4rem; }
+    .q-header { flex-direction: column; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-label">Material · Reflecție personală</div>
+  <h1>Test despre<br><em>Manifestarea Conștientă</em></h1>
+  <p>Răspunde la întrebări pe baza materialului primit. Unele au variantă de răspuns, altele îți cer să explici cu propriile cuvinte.</p>
+  <div class="hero-divider">
+    <span></span>
+    <i>✦</i>
+    <span></span>
+  </div>
+</div>
+
+<div class="progress-wrap" id="progress-wrap">
+  <span class="progress-label">Progres</span>
+  <div class="progress-bar-outer">
+    <div class="progress-bar-inner" id="progress-bar" style="width:0%"></div>
+  </div>
+  <span class="progress-count" id="progress-count">0 / 4</span>
+</div>
+
+<div class="content" id="quiz-content">
+
+  <div class="name-block">
+    <div class="name-label">Numele tău</div>
+    <input type="text" class="name-input" id="user-name" placeholder="Scrie numele tău complet...">
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-block">
+    <div class="q-inner">
+      <div class="q-header">
+        <span class="q-badge">01</span>
+        <div class="q-text">Ce este manifestarea?</div>
+      </div>
+      <div class="q-body">
+        <div class="options" id="q1">
+          <button class="opt" onclick="checkAnswer(this,'q1',false,'fb1')">
+            <span class="opt-dot"></span><span class="opt-label">Repetarea zilnică a unor afirmații pozitive</span>
+          </button>
+          <button class="opt" onclick="checkAnswer(this,'q1',true,'fb1')">
+            <span class="opt-dot"></span><span class="opt-label">Rezultatul natural al stării noastre interioare</span>
+          </button>
+          <button class="opt" onclick="checkAnswer(this,'q1',false,'fb1')">
+            <span class="opt-dot"></span><span class="opt-label">Vizualizarea intensă a dorinței până se împlinește</span>
+          </button>
+          <button class="opt" onclick="checkAnswer(this,'q1',false,'fb1')">
+            <span class="opt-dot"></span><span class="opt-label">Un proces magic prin care atragi ce îți dorești</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb1"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block">
+    <div class="q-inner">
+      <div class="q-header">
+        <span class="q-badge text-type">02 · Liber</span>
+        <div class="q-text">Care este „formula" manifestării? Explică cu cuvintele tale cum ai înțeles că funcționează.</div>
+      </div>
+      <div class="q-body">
+        <div class="text-wrap">
+          <div class="text-hint">Scrie răspunsul tău mai jos</div>
+          <textarea id="a2" placeholder="Descrie formula manifestării și felul în care funcționează, cu propriile cuvinte..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-block">
+    <div class="q-inner">
+      <div class="q-header">
+        <span class="q-badge">03</span>
+        <div class="q-text">De ce ne raportăm la energie atunci când vine vorba despre manifestare?</div>
+      </div>
+      <div class="q-body">
+        <div class="options" id="q3">
+          <button class="opt" onclick="checkAnswer(this,'q3',false,'fb3')">
+            <span class="opt-dot"></span><span class="opt-label">Pentru că mintea emite câmpuri energetice invizibile care atrag circumstanțele</span>
+          </button>
+          <button class="opt" onclick="checkAnswer(this,'q3',false,'fb3')">
+            <span class="opt-dot"></span><span class="opt-label">Pentru că emoțiile puternice creează unde electromagnetice ce influențează realitatea</span>
+          </button>
+          <button class="opt" onclick="checkAnswer(this,'q3',true,'fb3')">
+            <span class="opt-dot"></span><span class="opt-label">Din punct de vedere științific, tot ce există fizic e format din particule/atomi care reprezintă 99,999999999999% spațiu gol — adică energie</span>
+          </button>
+          <button class="opt" onclick="checkAnswer(this,'q3',false,'fb3')">
+            <span class="opt-dot"></span><span class="opt-label">Pentru că energia cosmică rezonează cu gândurile noastre și le materializează</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-block">
+    <div class="q-inner">
+      <div class="q-header">
+        <span class="q-badge text-type">04 · Liber</span>
+        <div class="q-text">Explică, așa cum ai înțeles tu, felul în care ne aliniem energetic la experiențe exterioare.</div>
+      </div>
+      <div class="q-body">
+        <div class="text-wrap">
+          <div class="text-hint">Scrie răspunsul tău mai jos</div>
+          <textarea id="a4" placeholder="Descrie procesul de aliniere energetică și cum se leagă de ceea ce experimentăm în exterior..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-block">
+    <div class="q-inner">
+      <div class="q-header">
+        <span class="q-badge">05</span>
+        <div class="q-text">De ce stăm predominant în emoții de frecvență joasă?</div>
+      </div>
+      <div class="q-body">
+        <div class="options" id="q5">
+          <button class="opt" onclick="checkAnswer(this,'q5',false,'fb5')">
+            <span class="opt-dot"></span><span class="opt-label">Pentru că suntem programați biologic să simțim mai mult negativul decât pozitivul</span>
+          </button>
+          <button class="opt" onclick="checkAnswer(this,'q5',true,'fb5')">
+            <span class="opt-dot"></span><span class="opt-label">Pentru că sunt cele care ne sunt familiare încă din copilărie</span>
+          </button>
+          <button class="opt" onclick="checkAnswer(this,'q5',false,'fb5')">
+            <span class="opt-dot"></span><span class="opt-label">Pentru că societatea și media ne expun constant la conținut negativ</span>
+          </button>
+          <button class="opt" onclick="checkAnswer(this,'q5',false,'fb5')">
+            <span class="opt-dot"></span><span class="opt-label">Pentru că emoțiile joase necesită mai puțină energie și sunt mai ușor de menținut</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb5"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-block">
+    <div class="q-inner">
+      <div class="q-header">
+        <span class="q-badge text-type">06 · Liber</span>
+        <div class="q-text">De ce este important, în procesul de manifestare conștientă, să lucrăm cu tiparele create în copilărie?</div>
+      </div>
+      <div class="q-body">
+        <div class="text-wrap">
+          <div class="text-hint">Scrie răspunsul tău mai jos</div>
+          <textarea id="a6" placeholder="Explică pe baza materialului de ce tiparele din copilărie sunt relevante în manifestarea conștientă..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-block">
+    <div class="q-inner">
+      <div class="q-header">
+        <span class="q-badge neutral-type">07 · Reflecție</span>
+        <div class="q-text">Ai avut conștientizări noi sau ai înțeles mai clar felul în care funcționează realitatea?</div>
+      </div>
+      <div class="q-body">
+        <div class="options" id="q7">
+          <button class="opt" onclick="checkNeutral(this,'q7','fb7')">
+            <span class="opt-dot"></span><span class="opt-label">Da, acum îmi e mult mai clar</span>
+          </button>
+          <button class="opt" onclick="checkNeutral(this,'q7','fb7')">
+            <span class="opt-dot"></span><span class="opt-label">Cunoșteam deja tot ceea ce ai explicat</span>
+          </button>
+          <button class="opt" onclick="checkNeutral(this,'q7','fb7')">
+            <span class="opt-dot"></span><span class="opt-label">Acum îmi e și mai neclar</span>
+          </button>
+          <button class="opt" onclick="checkNeutral(this,'q7','fb7')">
+            <span class="opt-dot"></span><span class="opt-label">Nu am înțeles nimic</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb7"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-block">
+    <div class="q-inner">
+      <div class="q-header">
+        <span class="q-badge text-type">08 · Liber</span>
+        <div class="q-text">Ce „aha"-uri sau conștientizări noi ai avut, dacă ai avut?</div>
+      </div>
+      <div class="q-body">
+        <div class="text-wrap">
+          <div class="text-hint">Scrie liber — orice insight, oricât de mic</div>
+          <textarea id="a8" placeholder="Descrie momentele de claritate sau conștientizările noi pe care le-ai avut în timpul materialului..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="submit-area">
+    <div class="error-msg" id="error-msg">Te rugăm să completezi numele înainte de a trimite.</div>
+    <button class="submit-btn" id="submit-btn" onclick="submitQuiz()">✦ Trimite răspunsurile</button>
+  </div>
+
+</div>
+
+<!-- Success screen -->
+<div class="success-screen" id="success-screen">
+  <span class="success-symbol">✦</span>
+  <h2 class="success-title">Mulțumesc, <em id="success-name"></em>!</h2>
+  <p class="success-msg">Felicitări pentru că îți oferi timp pentru tine și pentru propria ta creștere.<br>Fiecare pas de conștientizare contează.</p>
+  <div class="success-divider">
+    <span></span>
+    <i>✦</i>
+    <span></span>
+  </div>
+  <div class="success-score" id="success-score"></div>
+</div>
+
+<script>
+  let answered = {};
+  let neutralAnswered = {};
+  const totalMC = 3;
+  const totalNeutral = 1;
+
+  function checkAnswer(btn, groupId, isCorrect, feedbackId) {
+    if (answered[groupId] !== undefined) return;
+    answered[groupId] = isCorrect;
+    updateProgress();
+
+    const group = document.getElementById(groupId);
+    group.querySelectorAll('.opt').forEach(o => o.classList.add('disabled'));
+
+    const fb = document.getElementById(feedbackId);
+
+    if (isCorrect) {
+      btn.classList.add('correct');
+      btn.querySelector('.opt-dot').textContent = '✓';
+      fb.textContent = '✓ Corect! Acesta este răspunsul prezentat în material.';
+      fb.className = 'feedback show ok';
+    } else {
+      btn.classList.add('wrong');
+      btn.querySelector('.opt-dot').textContent = '✗';
+      group.querySelectorAll('.opt').forEach(o => {
+        if ((o.getAttribute('onclick') || '').includes(',true,')) {
+          o.classList.remove('disabled');
+          o.classList.add('correct');
+          o.querySelector('.opt-dot').textContent = '✓';
+        }
+      });
+      fb.textContent = '✗ Nu tocmai. Răspunsul corect a fost evidențiat cu verde.';
+      fb.className = 'feedback show bad';
+    }
+  }
+
+  function checkNeutral(btn, groupId, feedbackId) {
+    if (neutralAnswered[groupId]) return;
+    neutralAnswered[groupId] = btn.querySelector('.opt-label').textContent;
+    updateProgress();
+
+    document.getElementById(groupId).querySelectorAll('.opt').forEach(o => o.classList.add('disabled'));
+    btn.classList.remove('disabled');
+    btn.classList.add('neutral-selected');
+    btn.querySelector('.opt-dot').textContent = '✓';
+
+    const fb = document.getElementById(feedbackId);
+    fb.textContent = 'Mulțumesc pentru onestitate! Nu există un răspuns corect sau greșit aici.';
+    fb.className = 'feedback show neutral';
+  }
+
+  function updateProgress() {
+    const done = Object.keys(answered).length + Object.keys(neutralAnswered).length;
+    const total = totalMC + totalNeutral;
+    const pct = Math.round((done / total) * 100);
+    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('progress-count').textContent = done + ' / ' + total;
+  }
+
+  async function submitQuiz() {
+    const name = document.getElementById('user-name').value.trim();
+    const errEl = document.getElementById('error-msg');
+
+    if (!name) {
+      errEl.className = 'error-msg show';
+      document.getElementById('user-name').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('user-name').focus();
+      return;
+    }
+    errEl.className = 'error-msg';
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Se trimite...';
+
+    const score = Object.values(answered).filter(Boolean).length;
+
+    const q1ans = answered['q1'] !== undefined ? (answered['q1'] ? 'Corect' : 'Gresit') : 'Fara raspuns';
+    const q3ans = answered['q3'] !== undefined ? (answered['q3'] ? 'Corect' : 'Gresit') : 'Fara raspuns';
+    const q5ans = answered['q5'] !== undefined ? (answered['q5'] ? 'Corect' : 'Gresit') : 'Fara raspuns';
+    const q7ans = neutralAnswered['q7'] || 'Fara raspuns';
+
+    const a2 = document.getElementById('a2').value.trim() || '(necompletat)';
+    const a4 = document.getElementById('a4').value.trim() || '(necompletat)';
+    const a6 = document.getElementById('a6').value.trim() || '(necompletat)';
+    const a8 = document.getElementById('a8').value.trim() || '(necompletat)';
+
+    const data = {
+      Nume: name,
+      Scor: score + '/3',
+      'Q1 - Ce este manifestarea': q1ans,
+      'Q2 - Formula manifestarii': a2,
+      'Q3 - De ce ne raportam la energie': q3ans,
+      'Q4 - Aliniere energetica': a4,
+      'Q5 - Emotii de frecventa joasa': q5ans,
+      'Q6 - Tipare din copilarie': a6,
+      'Q7 - Constientizari noi': q7ans,
+      'Q8 - Aha-uri': a8,
+      _subject: 'Test Manifestare — ' + name + ' (' + score + '/3)'
+    };
+
+    try {
+      const res = await fetch('https://formspree.io/f/mpqbrvrd', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (res.ok) {
+        document.getElementById('quiz-content').style.display = 'none';
+        document.getElementById('progress-wrap').style.display = 'none';
+        document.getElementById('success-name').textContent = name;
+        document.getElementById('success-score').textContent = score + '/3 răspunsuri corecte ✦';
+        document.getElementById('success-screen').className = 'success-screen show';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        throw new Error('server error');
+      }
+    } catch (e) {
+      btn.disabled = false;
+      btn.textContent = '✦ Trimite răspunsurile';
+      errEl.textContent = 'A apărut o problemă. Încearcă din nou.';
+      errEl.className = 'error-msg show';
+    }
+  }
+</script>
+</body>
+</html>
